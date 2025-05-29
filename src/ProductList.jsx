@@ -5,6 +5,7 @@ import { addItem } from './CartSlice';
 import { useDispatch } from 'react-redux';
 
 function ProductList({ onHomeClick }) {
+    const dispatch = useDispatch()
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
     
@@ -253,6 +254,7 @@ function ProductList({ onHomeClick }) {
 
     const handleContinueShopping = (e) => {
         e.preventDefault();
+        console.log('Continue Shopping clicked');
         setShowCart(false);
     };
 
@@ -263,6 +265,7 @@ function ProductList({ onHomeClick }) {
           ...prevState, // Spread the previous state to retain existing entries
           [product.name]: true, // Set the current product's name as a key with value 'true' to mark it as added
         }));
+        setShowCart(true); // 👈 Show cart after adding
       };
 
     const [addedToCart, setAddedToCart] = useState({});
@@ -309,6 +312,7 @@ function ProductList({ onHomeClick }) {
                                         <button
                                             className="product-button"
                                             onClick={() => handleAddToCart(plant)} // Handle adding plant to cart
+                                            disabled={addedToCart[plant.name]} // Disable after adding
                                         >
                                             Add to Cart
                                         </button>
@@ -319,7 +323,13 @@ function ProductList({ onHomeClick }) {
                     ))}
                 </div>
             ) : (
-                <CartItem onContinueShopping={handleContinueShopping} />
+                //<CartItem onContinueShopping={handleContinueShopping} />
+                <CartItem onContinueShopping={() => {
+                    // Example: navigate to homepage or product list
+                    console.log("Navigating to continue shopping page");
+                    // If using React Router:
+                    navigate('/'); // or whatever route you want
+                  }} />
             )}
         </div>
     );
